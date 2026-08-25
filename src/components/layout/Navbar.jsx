@@ -1,0 +1,82 @@
+import { useState } from 'react'
+import { Link } from 'react-router-dom'
+import { tracks } from '../../data/tracks.js'
+
+export default function Navbar() {
+  const [isOpen, setIsOpen] = useState(false)
+  const [activeTrack, setActiveTrack] = useState(tracks[0].id)
+
+  return (
+    <>
+      <header className="fixed top-6 inset-x-0 z-50 flex justify-center px-4">
+        <nav className="inline-flex items-center gap-6 px-6 py-2.5 rounded-full bg-[#121216]/90 border border-white/10 backdrop-blur-md shadow-2xl text-xs font-medium">
+          <Link to="/" className="text-white font-semibold flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span> Home
+          </Link>
+          <Link to="/sobre" className="text-neutral-400 hover:text-white transition-colors">
+            Sobre Mim
+          </Link>
+          <a href="/#projetos" className="text-neutral-400 hover:text-white transition-colors">
+            Projetos
+          </a>
+          <a href="/#contato" className="text-neutral-400 hover:text-white transition-colors">
+            Contato
+          </a>
+
+          <div className="h-4 w-[1px] bg-white/10 my-auto"></div>
+
+          <button
+            type="button"
+            onClick={() => setIsOpen((prev) => !prev)}
+            className="flex items-center gap-2.5 bg-white/[0.04] hover:bg-white/[0.08] pl-1.5 pr-3 py-1 rounded-full border border-white/10 transition-all group cursor-pointer"
+          >
+            <div className="w-7 h-7 rounded-full bg-neutral-950 border border-neutral-700 flex items-center justify-center relative animate-vinyl-spin shadow-md group-hover:border-blue-400">
+              <div className="absolute inset-1 rounded-full border border-neutral-800"></div>
+              <div className="w-2.5 h-2.5 rounded-full bg-blue-500 flex items-center justify-center">
+                <div className="w-0.5 h-0.5 rounded-full bg-black"></div>
+              </div>
+            </div>
+            <div className="text-left">
+              <span className="block text-[8px] font-mono text-neutral-500 uppercase leading-none">Favorite Track</span>
+              <span className="text-[11px] font-mono text-neutral-200 font-semibold group-hover:text-blue-400 transition-colors">
+                Vinyl OST
+              </span>
+            </div>
+          </button>
+        </nav>
+      </header>
+
+      {isOpen && (
+        <div className="fixed top-20 left-1/2 -translate-x-1/2 z-50 w-80 bg-[#121216] border border-white/10 p-4 rounded-2xl shadow-2xl backdrop-blur-xl space-y-3">
+          <div className="flex items-center justify-between border-b border-white/5 pb-2">
+            <span className="text-[10px] font-mono text-blue-400 uppercase tracking-wider">Select Soundtrack</span>
+            <button type="button" onClick={() => setIsOpen(false)} className="text-neutral-500 hover:text-white text-xs">
+              ✕
+            </button>
+          </div>
+
+          <div className="space-y-2 text-xs">
+            {tracks.map((track) => {
+              const active = activeTrack === track.id
+              return (
+                <div
+                  key={track.id}
+                  onClick={() => setActiveTrack(track.id)}
+                  className={`p-2 rounded-lg flex items-center gap-3 cursor-pointer transition-colors border ${
+                    active ? 'bg-white/5 border-blue-500/30' : 'border-transparent hover:bg-white/5 text-neutral-400 hover:text-neutral-200'
+                  }`}
+                >
+                  <div className={`w-2 h-2 rounded-full ${active ? 'bg-blue-500' : 'bg-neutral-700'}`}></div>
+                  <div className="truncate">
+                    <p className={`truncate ${active ? 'font-semibold text-white' : 'font-medium'}`}>{track.title}</p>
+                    <p className={`text-[10px] ${active ? 'text-neutral-400' : 'text-neutral-500'}`}>{track.source}</p>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      )}
+    </>
+  )
+}
