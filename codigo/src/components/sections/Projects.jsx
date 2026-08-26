@@ -3,7 +3,7 @@ import { projects } from '../../data/projects.js'
 
 export default function Projects() {
   return (
-    <section id="projetos" className="max-w-4xl mx-auto px-6 py-24 space-y-10">
+    <section id="projetos" className="max-w-4xl mx-auto px-6 py-24 space-y-10 scroll-mt-28">
       <div className="flex justify-between items-end border-b border-white/10 pb-4">
         <div>
           <h2 className="text-2xl font-bold text-white tracking-tight">Projetos em Destaque</h2>

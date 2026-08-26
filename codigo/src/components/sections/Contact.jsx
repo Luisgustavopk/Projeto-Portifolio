@@ -9,7 +9,7 @@ const quickLinks = [
 
 export default function Contact() {
   return (
-    <section id="contato" className="max-w-4xl mx-auto px-6 py-20 space-y-10 border-t border-white/10">
+    <section id="contato" className="max-w-4xl mx-auto px-6 py-20 space-y-10 border-t border-white/10 scroll-mt-28">
       <div className="text-center space-y-2">
         <h2 className="text-2xl md:text-3xl font-bold text-white tracking-tight">Vamos Conversar</h2>
         <p className="text-xs text-neutral-400 max-w-md mx-auto">
