@@ -2,10 +2,28 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { tracks } from '../../data/tracks.js'
+import { ROLES, useRole } from '../../context/RoleContext.jsx'
 
 export default function Navbar() {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isMusicOpen, setIsMusicOpen] = useState(false)
+  const [isRoleOpen, setIsRoleOpen] = useState(false)
   const [activeTrack, setActiveTrack] = useState(tracks[0].id)
+  const { role, setRole, roleInfo } = useRole()
+
+  function openMusic() {
+    setIsRoleOpen(false)
+    setIsMusicOpen((prev) => !prev)
+  }
+
+  function openRole() {
+    setIsMusicOpen(false)
+    setIsRoleOpen((prev) => !prev)
+  }
+
+  function selectRole(id) {
+    setRole(id)
+    setIsRoleOpen(false)
+  }
 
   return (
     <>
@@ -28,7 +46,20 @@ export default function Navbar() {
 
           <button
             type="button"
-            onClick={() => setIsOpen((prev) => !prev)}
+            onClick={openRole}
+            className={`flex items-center gap-2 pl-3 pr-3 py-1.5 rounded-full border transition-all cursor-pointer ${
+              isRoleOpen ? 'bg-blue-500/10 border-blue-500/40' : 'bg-white/[0.04] hover:bg-white/[0.08] border-white/10'
+            }`}
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse"></span>
+            <span className="text-[11px] font-mono text-neutral-200 font-semibold">{roleInfo.label}</span>
+          </button>
+
+          <div className="h-4 w-[1px] bg-white/10 my-auto"></div>
+
+          <button
+            type="button"
+            onClick={openMusic}
             className="flex items-center gap-2.5 bg-white/[0.04] hover:bg-white/[0.08] pl-1.5 pr-3 py-1 rounded-full border border-white/10 transition-all group cursor-pointer"
           >
             <div className="w-7 h-7 rounded-full bg-neutral-950 border border-neutral-700 flex items-center justify-center relative animate-vinyl-spin shadow-md group-hover:border-blue-400">
@@ -48,7 +79,47 @@ export default function Navbar() {
       </header>
 
       <AnimatePresence>
-        {isOpen && (
+        {isRoleOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -8, scale: 0.97 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -8, scale: 0.97 }}
+            transition={{ duration: 0.18, ease: 'easeOut' }}
+            className="fixed top-20 left-1/2 -translate-x-1/2 z-50 w-80 bg-[#121216] border border-white/10 p-4 rounded-2xl shadow-2xl backdrop-blur-xl space-y-3"
+          >
+            <div className="flex items-center justify-between border-b border-white/5 pb-2">
+              <span className="text-[10px] font-mono text-blue-400 uppercase tracking-wider">// Quem é você?</span>
+              <button type="button" onClick={() => setIsRoleOpen(false)} className="text-neutral-500 hover:text-white text-xs">
+                ✕
+              </button>
+            </div>
+
+            <div className="space-y-2 text-xs">
+              {Object.values(ROLES).map((option) => {
+                const active = role === option.id
+                return (
+                  <div
+                    key={option.id}
+                    onClick={() => selectRole(option.id)}
+                    className={`p-2.5 rounded-lg flex items-start gap-3 cursor-pointer border transition-all duration-200 ${
+                      active ? 'bg-white/5 border-blue-500/30' : 'border-transparent hover:bg-white/5 text-neutral-400 hover:text-neutral-200'
+                    }`}
+                  >
+                    <div className={`w-2 h-2 rounded-full mt-1 transition-colors duration-200 ${active ? 'bg-blue-500' : 'bg-neutral-700'}`}></div>
+                    <div>
+                      <p className={active ? 'font-semibold text-white' : 'font-medium'}>{option.label}</p>
+                      <p className={`text-[10px] mt-0.5 ${active ? 'text-neutral-400' : 'text-neutral-500'}`}>{option.description}</p>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {isMusicOpen && (
           <motion.div
             initial={{ opacity: 0, y: -8, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -58,7 +129,7 @@ export default function Navbar() {
           >
             <div className="flex items-center justify-between border-b border-white/5 pb-2">
               <span className="text-[10px] font-mono text-blue-400 uppercase tracking-wider">// Select Soundtrack</span>
-              <button type="button" onClick={() => setIsOpen(false)} className="text-neutral-500 hover:text-white text-xs">
+              <button type="button" onClick={() => setIsMusicOpen(false)} className="text-neutral-500 hover:text-white text-xs">
                 ✕
               </button>
             </div>

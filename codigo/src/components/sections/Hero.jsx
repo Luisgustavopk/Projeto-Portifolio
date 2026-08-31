@@ -1,6 +1,25 @@
+import { Link } from 'react-router-dom'
 import { IconChevronDown } from '../ui/icons.jsx'
+import { useRole } from '../../context/RoleContext.jsx'
+
+const CTA_HREF = {
+  visitante: '#projetos',
+  tecnico: '#projetos',
+  recrutador: '/sobre#experiencias',
+}
+
+const SUBTITLE = {
+  visitante:
+    'Desenvolvendo aplicações completas, APIs robustas e arquiteturas resilientes. Foco em código limpo, boas práticas e alta performance.',
+  tecnico:
+    'Desenvolvendo aplicações completas, APIs robustas e arquiteturas resilientes. Confira a stack, o código e os repositórios de cada projeto.',
+  recrutador:
+    'Engenheiro de software em formação, com experiências, estágios e projetos organizados numa trajetória clara — direto ao ponto.',
+}
 
 export default function Hero() {
+  const { role, roleInfo } = useRole()
+
   return (
     <section className="pt-40 pb-20 border-b border-white/[0.06]">
       <div className="max-w-4xl mx-auto px-6 space-y-6">
@@ -13,25 +32,22 @@ export default function Hero() {
           Luis Gustavo <span className="text-neutral-500 font-normal">/ Software Engineer</span>
         </h1>
 
-        <p className="text-base text-neutral-400 max-w-2xl font-normal leading-relaxed">
-          Desenvolvendo aplicações completas, APIs robustas e arquiteturas resilientes. Foco em código limpo, boas
-          práticas e alta performance.
-        </p>
+        <p className="text-base text-neutral-400 max-w-2xl font-normal leading-relaxed">{SUBTITLE[role] || SUBTITLE.visitante}</p>
 
         <div className="flex items-center gap-4 pt-4">
-          <a
-            href="#projetos"
+          <Link
+            to={CTA_HREF[role] || CTA_HREF.visitante}
             className="bg-white text-black text-xs font-semibold px-5 py-3 rounded-lg hover:bg-neutral-200 transition-colors flex items-center gap-2"
           >
-            Ver Projetos
+            {roleInfo.ctaLabel}
             <IconChevronDown />
-          </a>
-          <a
-            href="#contato"
+          </Link>
+          <Link
+            to="#contato"
             className="bg-[#121216] border border-white/10 text-white text-xs font-semibold px-5 py-3 rounded-lg hover:bg-white/5 transition-colors"
           >
             Entrar em Contato
-          </a>
+          </Link>
         </div>
       </div>
     </section>
