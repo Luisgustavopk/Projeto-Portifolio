@@ -1,20 +1,39 @@
 import { motion } from 'framer-motion'
+import SobreMim from '../components/sections/SobreMim.jsx'
+import Experiencia from '../components/sections/Experiencia.jsx'
+import Interesses from '../components/sections/Interesses.jsx'
+import { useRole } from '../context/RoleContext.jsx'
 
-// Placeholder da Sprint 1 — aqui entram as seções "Sobre Mim" (PT/EN) e
-// "Experiências", assim que o layout dessa página for adaptado também.
+// Sprint 2 — níveis de acesso: a ordem das seções muda conforme o perfil
+// selecionado no navbar, priorizando o que mais importa pra cada um.
+const SECTION_ORDER = {
+  visitante: ['sobre', 'interesses', 'experiencia'],
+  recrutador: ['experiencia', 'sobre', 'interesses'],
+  tecnico: ['sobre', 'experiencia', 'interesses'],
+}
+
+const SECTIONS = {
+  sobre: SobreMim,
+  experiencia: Experiencia,
+  interesses: Interesses,
+}
+
 export default function Sobre() {
+  const { role } = useRole()
+  const order = SECTION_ORDER[role] || SECTION_ORDER.visitante
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -12 }}
       transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
+      className="pt-40"
     >
-      <section className="pt-40 pb-24 max-w-4xl mx-auto px-6">
-        <span className="text-[11px] font-mono text-blue-400 uppercase tracking-widest">// Em construção</span>
-        <h1 className="text-2xl font-bold text-white tracking-tight mt-2">Sobre Mim & Experiências</h1>
-        <p className="text-xs text-neutral-500 font-mono mt-4">Sprint 1 — layout ainda não implementado.</p>
-      </section>
+      {order.map((key) => {
+        const Section = SECTIONS[key]
+        return <Section key={key} />
+      })}
     </motion.div>
   )
 }

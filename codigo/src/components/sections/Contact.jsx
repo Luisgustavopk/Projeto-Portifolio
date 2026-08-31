@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { IconArrowRight, IconWhatsapp, IconLinkedin, IconGithub, IconMail } from '../ui/icons.jsx'
 
 const quickLinks = [
@@ -7,7 +8,53 @@ const quickLinks = [
   { icon: IconMail, label: 'E-mail Direto', hint: 'Abrir cliente local', href: 'mailto:seu-email@pucminas.br' },
 ]
 
+// TODO: trocar pelo endpoint real (crie um form em https://formspree.io e cole o ID aqui).
+const FORM_ENDPOINT = 'https://formspree.io/f/seu-id-aqui'
+
+const FIELD_CLASS =
+  'w-full bg-[#18181B] border rounded-lg px-4 py-2.5 text-xs text-white placeholder-neutral-600 focus:outline-none transition-colors'
+
 export default function Contact() {
+  const [values, setValues] = useState({ name: '', email: '', message: '' })
+  const [errors, setErrors] = useState({})
+  const [status, setStatus] = useState('idle') // idle | sending | success | error
+
+  function handleChange(event) {
+    const { name, value } = event.target
+    setValues((prev) => ({ ...prev, [name]: value }))
+  }
+
+  function validate() {
+    const nextErrors = {}
+    if (!values.name.trim()) nextErrors.name = 'Conta seu nome pra eu saber com quem estou falando.'
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email)) nextErrors.email = 'Digite um e-mail válido.'
+    if (values.message.trim().length < 10) nextErrors.message = 'Escreve uma mensagem um pouco maior (mín. 10 caracteres).'
+    setErrors(nextErrors)
+    return Object.keys(nextErrors).length === 0
+  }
+
+  async function handleSubmit(event) {
+    event.preventDefault()
+    if (!validate()) return
+
+    setStatus('sending')
+    try {
+      const response = await fetch(FORM_ENDPOINT, {
+        method: 'POST',
+        headers: { Accept: 'application/json' },
+        body: new FormData(event.target),
+      })
+      if (response.ok) {
+        setStatus('success')
+        setValues({ name: '', email: '', message: '' })
+      } else {
+        setStatus('error')
+      }
+    } catch {
+      setStatus('error')
+    }
+  }
+
   return (
     <section id="contato" className="max-w-4xl mx-auto px-6 py-20 space-y-10 border-t border-white/10 scroll-mt-28">
       <div className="text-center space-y-2">
@@ -18,20 +65,18 @@ export default function Contact() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
-        <form
-          action="https://formspree.io/f/seu-id-aqui"
-          method="POST"
-          className="md:col-span-7 bg-darkCard border border-white/10 p-6 rounded-2xl space-y-4 shadow-xl"
-        >
+        <form onSubmit={handleSubmit} noValidate className="md:col-span-7 bg-darkCard border border-white/10 p-6 rounded-2xl space-y-4 shadow-xl">
           <div className="space-y-1">
             <label className="text-[11px] font-mono text-neutral-400 uppercase">Seu Nome</label>
             <input
               type="text"
               name="name"
-              required
+              value={values.name}
+              onChange={handleChange}
               placeholder="Como posso te chamar?"
-              className="w-full bg-[#18181B] border border-white/10 rounded-lg px-4 py-2.5 text-xs text-white placeholder-neutral-600 focus:outline-none focus:border-blue-500/80 transition-colors"
+              className={`${FIELD_CLASS} ${errors.name ? 'border-red-500/60' : 'border-white/10 focus:border-blue-500/80'}`}
             />
+            {errors.name && <p className="text-[10px] text-red-400 font-mono">{errors.name}</p>}
           </div>
 
           <div className="space-y-1">
@@ -39,10 +84,12 @@ export default function Contact() {
             <input
               type="email"
               name="email"
-              required
+              value={values.email}
+              onChange={handleChange}
               placeholder="seuemail@dominio.com"
-              className="w-full bg-[#18181B] border border-white/10 rounded-lg px-4 py-2.5 text-xs text-white placeholder-neutral-600 focus:outline-none focus:border-blue-500/80 transition-colors"
+              className={`${FIELD_CLASS} ${errors.email ? 'border-red-500/60' : 'border-white/10 focus:border-blue-500/80'}`}
             />
+            {errors.email && <p className="text-[10px] text-red-400 font-mono">{errors.email}</p>}
           </div>
 
           <div className="space-y-1">
@@ -50,19 +97,31 @@ export default function Contact() {
             <textarea
               name="message"
               rows="4"
-              required
+              value={values.message}
+              onChange={handleChange}
               placeholder="Escreva sua mensagem aqui..."
-              className="w-full bg-[#18181B] border border-white/10 rounded-lg px-4 py-2.5 text-xs text-white placeholder-neutral-600 focus:outline-none focus:border-blue-500/80 transition-colors resize-none"
+              className={`${FIELD_CLASS} resize-none ${errors.message ? 'border-red-500/60' : 'border-white/10 focus:border-blue-500/80'}`}
             ></textarea>
+            {errors.message && <p className="text-[10px] text-red-400 font-mono">{errors.message}</p>}
           </div>
 
           <button
             type="submit"
-            className="w-full bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs py-3 px-5 rounded-lg transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-blue-600/20"
+            disabled={status === 'sending'}
+            className="w-full bg-blue-600 hover:bg-blue-500 disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold text-xs py-3 px-5 rounded-lg transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-blue-600/20"
           >
-            <span>Enviar Mensagem</span>
-            <IconArrowRight />
+            <span>{status === 'sending' ? 'Enviando...' : 'Enviar Mensagem'}</span>
+            {status !== 'sending' && <IconArrowRight />}
           </button>
+
+          {status === 'success' && (
+            <p className="text-xs font-mono text-emerald-400 text-center">Mensagem enviada — obrigado pelo contato!</p>
+          )}
+          {status === 'error' && (
+            <p className="text-xs font-mono text-red-400 text-center">
+              Não consegui enviar. Confira o endpoint do formulário ou tente de novo.
+            </p>
+          )}
         </form>
 
         <div className="md:col-span-5 grid grid-cols-2 md:grid-cols-1 gap-3">

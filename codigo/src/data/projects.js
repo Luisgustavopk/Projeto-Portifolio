@@ -1,8 +1,10 @@
 // Dados de placeholder — troque pelo conteúdo real dos seus projetos.
 // Cada item vira automaticamente um card na seção de Projetos.
+// "year" define a ordem na timeline (do mais antigo pro mais recente).
 export const projects = [
   {
     id: 1,
+    year: 2022,
     title: 'Sistema de Gestão Acadêmica',
     description:
       'Aplicação focada em manipulação de dados, estrutura de turmas e notas com persistência em banco relacional.',
@@ -11,6 +13,7 @@ export const projects = [
   },
   {
     id: 2,
+    year: 2023,
     title: 'Plataforma Full-Stack Web',
     description:
       'Plataforma web com suporte a rotas dinâmicas, arquitetura modular e renderização otimizada.',
