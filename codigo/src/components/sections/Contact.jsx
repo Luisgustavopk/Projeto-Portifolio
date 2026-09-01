@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { IconArrowRight, IconWhatsapp, IconLinkedin, IconGithub, IconMail } from '../ui/icons.jsx'
+import TopoField from '../layout/TopoField'
 
 const quickLinks = [
   { icon: IconWhatsapp, label: 'WhatsApp', hint: 'Conversa direta', href: 'https://wa.me/' },
@@ -8,16 +9,15 @@ const quickLinks = [
   { icon: IconMail, label: 'E-mail Direto', hint: 'Abrir cliente local', href: 'mailto:seu-email@pucminas.br' },
 ]
 
-// TODO: trocar pelo endpoint real (crie um form em https://formspree.io e cole o ID aqui).
 const FORM_ENDPOINT = 'https://formspree.io/f/seu-id-aqui'
 
 const FIELD_CLASS =
-  'w-full bg-[#18181B] border rounded-lg px-4 py-2.5 text-xs text-white placeholder-neutral-600 focus:outline-none transition-colors'
+  'w-full bg-white/[0.04] border rounded-lg px-4 py-2.5 text-xs text-white placeholder-neutral-500 focus:outline-none transition-colors'
 
 export default function Contact() {
   const [values, setValues] = useState({ name: '', email: '', message: '' })
   const [errors, setErrors] = useState({})
-  const [status, setStatus] = useState('idle') // idle | sending | success | error
+  const [status, setStatus] = useState('idle')
 
   function handleChange(event) {
     const { name, value } = event.target
@@ -56,94 +56,108 @@ export default function Contact() {
   }
 
   return (
-    <section id="contato" className="max-w-4xl mx-auto px-6 py-20 space-y-10 border-t border-white/10 scroll-mt-28">
-      <div className="text-center space-y-2">
-        <h2 className="text-2xl md:text-3xl font-bold text-white tracking-tight">Vamos Conversar</h2>
-        <p className="text-xs text-neutral-400 max-w-md mx-auto">
-          Envie uma mensagem direta ou entre em contato através das redes sociais.
-        </p>
+    <section id="contato" className="relative w-full py-20 border-t border-white/10 scroll-mt-28 overflow-hidden bg-transparent">
+      {/* Luz Azul Centralizada de Fundo (Mesmo tom do Hero/Projetos) */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-blue-600/10 blur-[130px] rounded-full pointer-events-none z-0" />
+
+      {/* Canvas TopoField Integrado com Transparência */}
+      <div className="absolute inset-0 z-0 pointer-events-none opacity-30">
+        <TopoField speed={0.5} density={0.9} length={1.0} />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
-        <form onSubmit={handleSubmit} noValidate className="md:col-span-7 bg-darkCard border border-white/10 p-6 rounded-2xl space-y-4 shadow-xl">
-          <div className="space-y-1">
-            <label className="text-[11px] font-mono text-neutral-400 uppercase">Seu Nome</label>
-            <input
-              type="text"
-              name="name"
-              value={values.name}
-              onChange={handleChange}
-              placeholder="Como posso te chamar?"
-              className={`${FIELD_CLASS} ${errors.name ? 'border-red-500/60' : 'border-white/10 focus:border-blue-500/80'}`}
-            />
-            {errors.name && <p className="text-[10px] text-red-400 font-mono">{errors.name}</p>}
-          </div>
+      <div className="relative z-10 max-w-4xl mx-auto px-6 space-y-10">
+        <div className="text-center space-y-2">
+          <h2 className="text-2xl md:text-3xl font-bold text-white tracking-tight">Vamos Conversar</h2>
+          <p className="text-xs text-neutral-400 max-w-md mx-auto">
+            Envie uma mensagem direta ou entre em contato através das redes sociais.
+          </p>
+        </div>
 
-          <div className="space-y-1">
-            <label className="text-[11px] font-mono text-neutral-400 uppercase">Seu E-mail</label>
-            <input
-              type="email"
-              name="email"
-              value={values.email}
-              onChange={handleChange}
-              placeholder="seuemail@dominio.com"
-              className={`${FIELD_CLASS} ${errors.email ? 'border-red-500/60' : 'border-white/10 focus:border-blue-500/80'}`}
-            />
-            {errors.email && <p className="text-[10px] text-red-400 font-mono">{errors.email}</p>}
-          </div>
-
-          <div className="space-y-1">
-            <label className="text-[11px] font-mono text-neutral-400 uppercase">Mensagem</label>
-            <textarea
-              name="message"
-              rows="4"
-              value={values.message}
-              onChange={handleChange}
-              placeholder="Escreva sua mensagem aqui..."
-              className={`${FIELD_CLASS} resize-none ${errors.message ? 'border-red-500/60' : 'border-white/10 focus:border-blue-500/80'}`}
-            ></textarea>
-            {errors.message && <p className="text-[10px] text-red-400 font-mono">{errors.message}</p>}
-          </div>
-
-          <button
-            type="submit"
-            disabled={status === 'sending'}
-            className="w-full bg-blue-600 hover:bg-blue-500 disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold text-xs py-3 px-5 rounded-lg transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-blue-600/20"
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+          <form 
+            onSubmit={handleSubmit} 
+            noValidate 
+            className="md:col-span-7 bg-[#0b0c10]/60 backdrop-blur-md border border-white/10 p-6 rounded-2xl space-y-4 shadow-xl"
           >
-            <span>{status === 'sending' ? 'Enviando...' : 'Enviar Mensagem'}</span>
-            {status !== 'sending' && <IconArrowRight />}
-          </button>
+            <div className="space-y-1">
+              <label className="text-[11px] font-mono text-neutral-400 uppercase">Seu Nome</label>
+              <input
+                type="text"
+                name="name"
+                value={values.name}
+                onChange={handleChange}
+                placeholder="Como posso te chamar?"
+                className={`${FIELD_CLASS} ${errors.name ? 'border-red-500/60' : 'border-white/10 focus:border-blue-500/80'}`}
+              />
+              {errors.name && <p className="text-[10px] text-red-400 font-mono">{errors.name}</p>}
+            </div>
 
-          {status === 'success' && (
-            <p className="text-xs font-mono text-emerald-400 text-center">Mensagem enviada — obrigado pelo contato!</p>
-          )}
-          {status === 'error' && (
-            <p className="text-xs font-mono text-red-400 text-center">
-              Não consegui enviar. Confira o endpoint do formulário ou tente de novo.
-            </p>
-          )}
-        </form>
+            <div className="space-y-1">
+              <label className="text-[11px] font-mono text-neutral-400 uppercase">Seu E-mail</label>
+              <input
+                type="email"
+                name="email"
+                value={values.email}
+                onChange={handleChange}
+                placeholder="seuemail@dominio.com"
+                className={`${FIELD_CLASS} ${errors.email ? 'border-red-500/60' : 'border-white/10 focus:border-blue-500/80'}`}
+              />
+              {errors.email && <p className="text-[10px] text-red-400 font-mono">{errors.email}</p>}
+            </div>
 
-        <div className="md:col-span-5 grid grid-cols-2 md:grid-cols-1 gap-3">
-          {quickLinks.map(({ icon: Icon, label, hint, href }) => {
-            const isExternal = href.startsWith('http')
-            return (
-              <a
-                key={label}
-                href={href}
-                {...(isExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-                className="bg-darkCard border border-white/10 hover:border-blue-500/40 p-4 rounded-xl flex items-center gap-3 transition-all group"
-              >
-                <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-neutral-400 group-hover:text-blue-400 transition-colors">
-                  <Icon />
-                </div>
-                <div>
-                  <span className="block text-xs font-semibold text-white">{label}</span>
-                  <span className="text-[10px] text-neutral-500">{hint}</span>
-                </div>
-              </a>
-            )
-          })}
+            <div className="space-y-1">
+              <label className="text-[11px] font-mono text-neutral-400 uppercase">Mensagem</label>
+              <textarea
+                name="message"
+                rows="4"
+                value={values.message}
+                onChange={handleChange}
+                placeholder="Escreva sua mensagem aqui..."
+                className={`${FIELD_CLASS} resize-none ${errors.message ? 'border-red-500/60' : 'border-white/10 focus:border-blue-500/80'}`}
+              ></textarea>
+              {errors.message && <p className="text-[10px] text-red-400 font-mono">{errors.message}</p>}
+            </div>
+
+            <button
+              type="submit"
+              disabled={status === 'sending'}
+              className="w-full bg-blue-600 hover:bg-blue-500 disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold text-xs py-3 px-5 rounded-lg transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-blue-600/20"
+            >
+              <span>{status === 'sending' ? 'Enviando...' : 'Enviar Mensagem'}</span>
+              {status !== 'sending' && <IconArrowRight />}
+            </button>
+
+            {status === 'success' && (
+              <p className="text-xs font-mono text-emerald-400 text-center">Mensagem enviada — obrigado pelo contato!</p>
+            )}
+            {status === 'error' && (
+              <p className="text-xs font-mono text-red-400 text-center">
+                Não consegui enviar. Confira o endpoint do formulário ou tente de novo.
+              </p>
+            )}
+          </form>
+
+          <div className="md:col-span-5 grid grid-cols-2 md:grid-cols-1 gap-3">
+            {quickLinks.map(({ icon: Icon, label, hint, href }) => {
+              const isExternal = href.startsWith('http')
+              return (
+                <a
+                  key={label}
+                  href={href}
+                  {...(isExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                  className="bg-[#0b0c10]/60 backdrop-blur-md border border-white/10 hover:border-blue-500/40 p-4 rounded-xl flex items-center gap-3 transition-all group shadow-md"
+                >
+                  <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-neutral-400 group-hover:text-blue-400 transition-colors">
+                    <Icon />
+                  </div>
+                  <div>
+                    <span className="block text-xs font-semibold text-white">{label}</span>
+                    <span className="text-[10px] text-neutral-500">{hint}</span>
+                  </div>
+                </a>
+              )
+            })}
+          </div>
         </div>
       </div>
     </section>

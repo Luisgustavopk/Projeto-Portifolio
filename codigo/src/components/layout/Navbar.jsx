@@ -103,10 +103,9 @@ export default function Navbar() {
         <nav className="inline-flex items-center gap-3 md:gap-6 px-4 py-2.5 rounded-full bg-[#121216]/90 border border-white/10 backdrop-blur-md shadow-2xl text-xs font-medium w-full max-w-sm sm:max-w-md md:max-w-max justify-between md:justify-start">
           
           {/* Logo / Link Home */}
-          <Link to="/" className="text-white font-semibold flex items-center gap-2 shrink-0">
-            <span className="w-2 h-2 rounded-full bg-blue-500"></span> Luis Gustavo
+          <Link to="/" className="text-white font-semibold flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span> Home
           </Link>
-
           {/* Links Desktop */}
           <div className="hidden md:flex items-center gap-5">
             <div className="h-4 w-[1px] bg-white/10"></div>

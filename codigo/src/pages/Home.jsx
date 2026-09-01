@@ -6,11 +6,6 @@ import Contact from '../components/sections/Contact.jsx'
 import RecruiterHighlight from '../components/sections/RecruiterHighlight.jsx'
 import { useRole } from '../context/RoleContext.jsx'
 
-// Sprint 2 — níveis de acesso: a ordem do conteúdo (depois do Hero) muda
-// conforme o perfil selecionado no navbar.
-// - técnico: projetos vêm antes da faixa de stack (prova de trabalho primeiro)
-// - recrutador: banner com a experiência mais recente, direto após o Hero
-// - visitante: ordem padrão
 const BODY_ORDER = {
   visitante: ['techstack', 'projects'],
   tecnico: ['projects', 'techstack'],

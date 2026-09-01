@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import SobreMim from '../components/sections/SobreMim.jsx'
 import Experiencia from '../components/sections/Experiencia.jsx'
+import Contact from '../components/sections/Contact.jsx'
 import Interesses from '../components/sections/Interesses.jsx'
 import { useRole } from '../context/RoleContext.jsx'
 
@@ -34,6 +35,7 @@ export default function Sobre() {
         const Section = SECTIONS[key]
         return <Section key={key} />
       })}
+      <Contact />
     </motion.div>
   )
 }
