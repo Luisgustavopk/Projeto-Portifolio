@@ -18,7 +18,6 @@ export const AmbientGlow = () => {
     resizeCanvas()
     window.addEventListener('resize', resizeCanvas)
 
-  
     const particleCount = 45
     const particles = Array.from({ length: particleCount }, () => ({
       x: Math.random() * window.innerWidth,
@@ -34,40 +33,46 @@ export const AmbientGlow = () => {
     const render = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height)
 
+      // Ajustes específicos para telas móbile (< 768px)
+      const isMobile = canvas.width < 768
+      const opacityFactor = isMobile ? 0.45 : 1.0  
+      const scaleFactor = isMobile ? 0.65 : 1.0    
+
       const rawLevel = levelRef?.current || 0
       const amp = Math.pow(rawLevel, 0.6)
 
       const centerX = canvas.width / 2
-      const centerY = canvas.height * 0.32
+      const centerY = canvas.height * (isMobile ? 0.25 : 0.32)
 
       wavePhase += 0.008 + amp * 0.02
 
-     
+      // Gradiente radial de fundo
       const gradient = ctx.createRadialGradient(
-        centerX, centerY, 20,
-        centerX, centerY, 380 + amp * 80
+        centerX, centerY, 20 * scaleFactor,
+        centerX, centerY, (380 + amp * 80) * scaleFactor
       )
-      gradient.addColorStop(0, `rgba(37, 99, 235, ${0.18 + amp * 0.12})`)
-      gradient.addColorStop(0.55, `rgba(14, 165, 233, ${0.07 + amp * 0.06})`)
+      gradient.addColorStop(0, `rgba(37, 99, 235, ${(0.18 + amp * 0.12) * opacityFactor})`)
+      gradient.addColorStop(0.55, `rgba(14, 165, 233, ${(0.07 + amp * 0.06) * opacityFactor})`)
       gradient.addColorStop(1, 'rgba(0, 0, 0, 0)')
 
       ctx.fillStyle = gradient
       ctx.beginPath()
-      ctx.arc(centerX, centerY, 420 + amp * 80, 0, Math.PI * 2)
+      ctx.arc(centerX, centerY, (420 + amp * 80) * scaleFactor, 0, Math.PI * 2)
       ctx.fill()
 
+      // Ondas e anéis orbitais
       const waveCount = 6
       for (let i = 0; i < waveCount; i++) {
-        const baseRadius = 85 + i * 50
-        const waveAmp = (5 + i * 2) + amp * (12 + i * 6)
-        const currentOpacity = Math.max(0, (0.01 + amp * 0.2) - i * 0.006)
+        const baseRadius = (85 + i * 50) * scaleFactor
+        const waveAmp = ((5 + i * 2) + amp * (12 + i * 6)) * scaleFactor
+        const currentOpacity = Math.max(0, ((0.01 + amp * 0.35) - i * 0.006) * opacityFactor)
 
         ctx.beginPath()
         
         const step = 0.05
         for (let theta = 0; theta <= Math.PI * 2 + step; theta += step) {
           const distortion = Math.sin(theta * (3 + (i % 3)) + wavePhase * 1.5 + i) * waveAmp
-          const r = baseRadius + distortion + (amp * 10 * (i + 1))
+          const r = baseRadius + distortion + (amp * 10 * (i + 1) * scaleFactor)
           
           const x = centerX + r * Math.cos(theta)
           const y = centerY + r * Math.sin(theta)
@@ -95,7 +100,7 @@ export const AmbientGlow = () => {
         ctx.stroke()
       }
 
-  
+      // Partículas fluindo
       ctx.setLineDash([])
       particles.forEach((p) => {
         p.y -= p.speedY + amp * 1.2
@@ -106,14 +111,14 @@ export const AmbientGlow = () => {
           p.x = Math.random() * canvas.width
         }
 
-        const particleRadius = p.radius + amp * 1.4
-        const currentAlpha = Math.min(0.75, p.alpha + amp * 0.35)
+        const particleRadius = (p.radius + amp * 1.4) * (isMobile ? 0.75 : 1)
+        const currentAlpha = Math.min(0.75, (p.alpha + amp * 0.35) * opacityFactor)
 
         ctx.beginPath()
         ctx.arc(p.x, p.y, particleRadius, 0, Math.PI * 2)
         ctx.fillStyle = `rgba(147, 197, 253, ${currentAlpha})`
-        ctx.shadowBlur = 4 + amp * 8
-        ctx.shadowColor = 'rgba(59, 130, 246, 0.7)'
+        ctx.shadowBlur = (4 + amp * 8) * scaleFactor
+        ctx.shadowColor = `rgba(59, 130, 246, ${0.7 * opacityFactor})`
         ctx.fill()
         ctx.shadowBlur = 0
       })

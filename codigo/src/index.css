@@ -9,6 +9,8 @@
     linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
 }
 
+
+
 /* Força qualquer logo (colorido na origem) a virar um monograma monocromático:
    brightness(0) achata tudo pra preto, invert(1) vira branco. A opacidade dá o
    tom "apagado" da referência; sobe pra 1 no hover do card do marquee. */
@@ -19,4 +21,35 @@
 }
 .tech-icon:hover {
   opacity: 0.9;
+}
+/* Customização completa para Chrome, Edge, Safari e Opera */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #09090d;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #27272a;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #19407e;
+}
+
+::-webkit-scrollbar-button {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+/* Regra exclusiva para o Firefox sem interferir nos navegadores Chromium */
+@supports not selector(::-webkit-scrollbar) {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #27272a #09090d;
+  }
 }
