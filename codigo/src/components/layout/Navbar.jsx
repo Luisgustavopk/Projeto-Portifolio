@@ -3,12 +3,29 @@ import { Link } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { tracks } from '../../data/tracks.js'
 import { ROLES, useRole } from '../../context/RoleContext.jsx'
+import { usePlayer } from '../../context/PlayerContext.jsx'
+
+function EqualizerBars() {
+  return (
+    <span className="flex items-end gap-[2px] h-3">
+      {[0, 1, 2].map((i) => (
+        <span
+          key={i}
+          className="w-[2px] bg-blue-400 rounded-full animate-pulse"
+          style={{ height: '100%', animationDuration: '0.9s', animationDelay: `${i * 0.15}s` }}
+        ></span>
+      ))}
+    </span>
+  )
+}
 
 export default function Navbar() {
   const [isMusicOpen, setIsMusicOpen] = useState(false)
   const [isRoleOpen, setIsRoleOpen] = useState(false)
-  const [activeTrack, setActiveTrack] = useState(tracks[0].id)
   const { role, setRole, roleInfo } = useRole()
+  const { currentTrackId, isPlaying, playTrack } = usePlayer()
+
+  const nowPlaying = tracks.find((t) => t.id === currentTrackId)
 
   function openMusic() {
     setIsRoleOpen(false)
@@ -62,16 +79,23 @@ export default function Navbar() {
             onClick={openMusic}
             className="flex items-center gap-2.5 bg-white/[0.04] hover:bg-white/[0.08] pl-1.5 pr-3 py-1 rounded-full border border-white/10 transition-all group cursor-pointer"
           >
-            <div className="w-7 h-7 rounded-full bg-neutral-950 border border-neutral-700 flex items-center justify-center relative animate-vinyl-spin shadow-md group-hover:border-blue-400">
+            <div
+              className={`w-7 h-7 rounded-full bg-neutral-950 border flex items-center justify-center relative shadow-md group-hover:border-blue-400 ${
+                isPlaying ? 'border-blue-500/70 animate-vinyl-spin' : 'border-neutral-700'
+              }`}
+            >
               <div className="absolute inset-1 rounded-full border border-neutral-800"></div>
               <div className="w-2.5 h-2.5 rounded-full bg-blue-500 flex items-center justify-center">
                 <div className="w-0.5 h-0.5 rounded-full bg-black"></div>
               </div>
             </div>
             <div className="text-left">
-              <span className="block text-[8px] font-mono text-neutral-500 uppercase leading-none">Favorite Track</span>
-              <span className="text-[11px] font-mono text-neutral-200 font-semibold group-hover:text-blue-400 transition-colors">
-                Vinyl OST
+              <span className="block text-[8px] font-mono text-neutral-500 uppercase leading-none">
+                {isPlaying ? 'Now Playing' : 'Favorite Track'}
+              </span>
+              <span className="text-[11px] font-mono text-neutral-200 font-semibold group-hover:text-blue-400 transition-colors flex items-center gap-1.5">
+                {nowPlaying ? nowPlaying.title : 'Vinyl OST'}
+                {isPlaying && <EqualizerBars />}
               </span>
             </div>
           </button>
@@ -128,7 +152,7 @@ export default function Navbar() {
             className="fixed top-20 left-1/2 -translate-x-1/2 z-50 w-80 bg-[#121216] border border-white/10 p-4 rounded-2xl shadow-2xl backdrop-blur-xl space-y-3"
           >
             <div className="flex items-center justify-between border-b border-white/5 pb-2">
-              <span className="text-[10px] font-mono text-blue-400 uppercase tracking-wider">// Select Soundtrack</span>
+              <span className="text-[10px] font-mono text-blue-400 uppercase tracking-wider">Select Soundtrack</span>
               <button type="button" onClick={() => setIsMusicOpen(false)} className="text-neutral-500 hover:text-white text-xs">
                 ✕
               </button>
@@ -136,24 +160,33 @@ export default function Navbar() {
 
             <div className="space-y-2 text-xs">
               {tracks.map((track) => {
-                const active = activeTrack === track.id
+                const active = currentTrackId === track.id
+                const activePlaying = active && isPlaying
                 return (
                   <div
                     key={track.id}
-                    onClick={() => setActiveTrack(track.id)}
+                    onClick={() => playTrack(track)}
                     className={`p-2 rounded-lg flex items-center gap-3 cursor-pointer border transition-all duration-200 ${
                       active ? 'bg-white/5 border-blue-500/30' : 'border-transparent hover:bg-white/5 text-neutral-400 hover:text-neutral-200'
                     }`}
                   >
-                    <div className={`w-2 h-2 rounded-full transition-colors duration-200 ${active ? 'bg-blue-500' : 'bg-neutral-700'}`}></div>
-                    <div className="truncate">
+                    {activePlaying ? (
+                      <EqualizerBars />
+                    ) : (
+                      <div className={`w-2 h-2 rounded-full transition-colors duration-200 ${active ? 'bg-blue-500' : 'bg-neutral-700'}`}></div>
+                    )}
+                    <div className="truncate flex-1">
                       <p className={`truncate ${active ? 'font-semibold text-white' : 'font-medium'}`}>{track.title}</p>
                       <p className={`text-[10px] ${active ? 'text-neutral-400' : 'text-neutral-500'}`}>{track.source}</p>
                     </div>
+                    {active && <span className="text-[9px] font-mono text-blue-400 shrink-0">{isPlaying ? 'pausar' : 'tocar'}</span>}
                   </div>
                 )
               })}
             </div>
+            <p className="text-[9px] font-mono text-neutral-600 pt-1 border-t border-white/5">
+              volume baixo, só um clima de fundo
+            </p>
           </motion.div>
         )}
       </AnimatePresence>

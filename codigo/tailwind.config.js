@@ -20,9 +20,14 @@ export default {
         vinylSpin: {
           '100%': { transform: 'rotate(360deg)' },
         },
+        marquee: {
+          '0%': { transform: 'translateX(0)' },
+          '100%': { transform: 'translateX(-50%)' },
+        },
       },
       animation: {
         'vinyl-spin': 'vinylSpin 8s linear infinite',
+        marquee: 'marquee 28s linear infinite',
       },
     },
   },
