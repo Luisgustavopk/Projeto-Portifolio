@@ -23,6 +23,12 @@ O navbar tem um seletor de perfil — **Visitante**, **Recrutador** ou **Técnic
 
 Documentação completa (requisitos, user stories e diagrama de casos de uso) em [`docs/requisitos-niveis-acesso.md`](./docs/requisitos-niveis-acesso.md).
 
+### Detalhes de identidade visual
+
+- **Stack tecnológica**: faixa em marquee contínuo (loop suave), com os logos de cada tecnologia puxados via hotlink de [logos.lndev.me](https://logos.lndev.me/) e forçados pra monocromático via CSS (`filter: brightness(0) invert(1)` + opacidade reduzida) — assim funciona independente da cor original de cada marca.
+- **Música (popover do disco de vinil)**: agora toca de verdade, baixinho, e a `AmbientGlow` (o brilho azul de fundo) pulsa em sincronia com o áudio via Web Audio API (`AnalyserNode`), de forma suave. **Importante**: as 3 faixas (Baldur's Gate 3, Resident Evil, One Piece) são música comercial licenciada — eu não posso fornecer os arquivos. O player já está funcional, só falta você colocar seus próprios `.mp3` em `codigo/public/audio/` (instruções no README daquela pasta) ou trocar por trilhas royalty-free.
+- **Cards de projeto**: efeito de brilho que segue o cursor ao passar o mouse (inspirado no estilo de componentes do [21st.dev](https://21st.dev/), reimplementado do zero em CSS + React — não foi copiado de lá).
+
 ## Tecnologias utilizadas
 
 - [React](https://react.dev/) — biblioteca de interface
@@ -32,6 +38,7 @@ Documentação completa (requisitos, user stories e diagrama de casos de uso) em
 - [Tailwind CSS](https://tailwindcss.com/) — estilização utilitária
 - Fontes: [Inter](https://fonts.google.com/specimen/Inter) (texto) e [JetBrains Mono](https://fonts.google.com/specimen/JetBrains+Mono) (elementos mono/terminal)
 - [Formspree](https://formspree.io/) — envio do formulário de contato sem backend próprio
+- [Web Audio API](https://developer.mozilla.org/pt-BR/docs/Web/API/Web_Audio_API) — análise de frequência do áudio em tempo real (reatividade da `AmbientGlow`)
 
 ## Estrutura do repositório
 
@@ -55,27 +62,31 @@ Projeto-Portifolio/
     ├── postcss.config.js
     ├── vite.config.js
     ├── package.json
+    ├── public/
+    │   └── audio/                       # coloque aqui os .mp3 das faixas (ver README dessa pasta)
     └── src/
-        ├── main.jsx                    # ponto de entrada + BrowserRouter + RoleProvider
+        ├── main.jsx                    # ponto de entrada + BrowserRouter + RoleProvider + PlayerProvider
         ├── App.jsx                     # rotas (/ e /sobre) + transição de página
-        ├── index.css                   # diretivas Tailwind + estilos globais
+        ├── index.css                   # diretivas Tailwind + estilos globais + .tech-icon (monocromático)
         ├── context/
-        │   └── RoleContext.jsx          # estado global do perfil (níveis de acesso)
+        │   ├── RoleContext.jsx          # estado global do perfil (níveis de acesso)
+        │   └── PlayerContext.jsx        # player de música + análise de frequência (Web Audio API)
         ├── hooks/
-        │   └── useHashScroll.js         # scroll suave até âncoras (#projetos, #contato...)
+        │   ├── useHashScroll.js         # scroll suave até âncoras (#projetos, #contato...)
+        │   └── useSpotlight.js          # brilho que segue o cursor nos cards (estilo 21st.dev)
         ├── pages/
         │   ├── Home.jsx                 # composição da Home (ordem varia por perfil)
         │   └── Sobre.jsx                # composição do Sobre (ordem varia por perfil)
         ├── components/
         │   ├── layout/
         │   │   ├── Layout.jsx            # Navbar + AmbientGlow persistentes entre rotas
-        │   │   ├── Navbar.jsx            # navegação + seletor de perfil + popover de música
-        │   │   └── AmbientGlow.jsx
+        │   │   ├── Navbar.jsx            # navegação + seletor de perfil + popover de música (funcional)
+        │   │   └── AmbientGlow.jsx       # glow de fundo, reage ao volume da música tocando
         │   ├── sections/
         │   │   ├── Hero.jsx
-        │   │   ├── TechStack.jsx
+        │   │   ├── TechStack.jsx         # marquee contínuo com os logos das tecnologias
         │   │   ├── Projects.jsx          # timeline de projetos (ordenada por ano)
-        │   │   ├── ProjectCard.jsx
+        │   │   ├── ProjectCard.jsx       # com efeito de spotlight no hover
         │   │   ├── Contact.jsx           # formulário com validação + envio via fetch
         │   │   ├── RecruiterHighlight.jsx# banner exclusivo do perfil Recrutador
         │   │   ├── SobreMim.jsx          # bio PT/EN + área de atuação
@@ -87,7 +98,8 @@ Projeto-Portifolio/
             ├── projects.js               # conteúdo dos cards de projeto (placeholder)
             ├── experiences.js            # experiências profissionais (placeholder)
             ├── profile.js                # bio PT/EN, área de atuação, interesses (placeholder)
-            └── tracks.js                 # trilhas do popover de música
+            ├── techStack.js              # tecnologias do marquee (slug do logo + nome)
+            └── tracks.js                 # trilhas do popover de música (título, fonte, arquivo de áudio)
 ```
 
 `docs/` é o nome padrão usado pelo próprio GitHub para pastas de documentação (inclusive para publicar GitHub Pages a partir dela). Já `codigo/` é uma escolha livre — funciona bem e já está descritivo, mas se preferir seguir a convenção mais comum em projetos front-end em inglês (`app/`, `web/` ou `frontend/`), é só avisar que eu ajusto os imports e a estrutura.
@@ -128,6 +140,7 @@ O conteúdo pessoal (bio, formação, experiências, projetos, links de redes so
 - `codigo/src/data/experiences.js` — experiências profissionais
 - `codigo/src/data/projects.js` — projetos (nome, descrição, tecnologias, link do GitHub)
 - `codigo/src/components/sections/Contact.jsx` — links de WhatsApp, LinkedIn, GitHub e e-mail (constante `quickLinks`)
+- `codigo/public/audio/` — arquivos `.mp3` das 3 faixas do player (ver aviso de direitos autorais no README dessa pasta)
 
 ## Protótipos (Figma)
 
