@@ -14,6 +14,7 @@ export function PlayerProvider({ children }) {
   const dataArrayRef = useRef(null)
   const rafRef = useRef(null)
   const levelRef = useRef(0)
+  const bandsRef = useRef({ bass: 0, mid: 0, treble: 0 })
 
   const [currentTrackId, setCurrentTrackId] = useState(null)
   const [isPlaying, setIsPlaying] = useState(false)
@@ -23,6 +24,18 @@ export function PlayerProvider({ children }) {
     const data = dataArrayRef.current
     if (analyser && data) {
       analyser.getByteFrequencyData(data)
+
+      const third = Math.floor(data.length / 3)
+      let bass = 0
+      let mid = 0
+      let treble = 0
+      for (let i = 0; i < third; i++) bass += data[i]
+      for (let i = third; i < third * 2; i++) mid += data[i]
+      for (let i = third * 2; i < data.length; i++) treble += data[i]
+      bandsRef.current.bass = bass / third / 255
+      bandsRef.current.mid = mid / third / 255
+      bandsRef.current.treble = treble / (data.length - third * 2) / 255
+
       let sum = 0
       for (let i = 0; i < data.length; i++) sum += data[i]
       levelRef.current = sum / data.length / 255
@@ -95,7 +108,7 @@ export function PlayerProvider({ children }) {
     }
   }
 
-  const value = { currentTrackId, isPlaying, playTrack, togglePlay, levelRef }
+  const value = { currentTrackId, isPlaying, playTrack, togglePlay, levelRef, bandsRef }
 
   return (
     <PlayerContext.Provider value={value}>

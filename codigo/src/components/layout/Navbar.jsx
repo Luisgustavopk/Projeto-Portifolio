@@ -1,10 +1,11 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
-import { AlignRight, X, ChevronRight } from 'lucide-react'
+import { AlignRight, X, ChevronRight, Bot } from 'lucide-react'
 import { tracks } from '../../data/tracks.js'
 import { ROLES, useRole } from '../../context/RoleContext.jsx'
 import { usePlayer } from '../../context/PlayerContext.jsx'
+import { useRobot } from '../../context/RobotContext.jsx'
 
 function EqualizerBars() {
   return (
@@ -37,6 +38,7 @@ export default function Navbar() {
   const [isMusicOpen, setIsMusicOpen] = useState(false)
   const [isRoleOpen, setIsRoleOpen] = useState(false)
 
+  const { isRobotVisible, setIsRobotVisible } = useRobot()
   const { role, setRole, roleInfo } = useRole()
   const { currentTrackId, isPlaying, playTrack } = usePlayer()
 
@@ -128,6 +130,18 @@ export default function Navbar() {
           >
             <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse"></span>
             <span className="text-[11px] font-mono text-neutral-200 font-semibold">{roleInfo.label}</span>
+          </button>
+
+      <button
+          onClick={() => setIsRobotVisible((prev) => !prev)}
+          className={`hidden md:flex p-2 rounded-full border transition-all duration-300 flex items-center justify-center ${
+            isRobotVisible
+              ? 'bg-blue-500/30 blue-500/70 text-blue-500/70 shadow-[0_0_12px_rgba(0,243,255,0.4)]'
+              : 'bg-white/5 border-white/10 text-gray-400 hover:text-white hover:border-white/20'
+          }`}
+          title="Alternar mascote robô"
+        >
+            <Bot className="w-5 h-5" />
           </button>
 
           {/* Player de Música (Desktop) */}
