@@ -1,17 +1,25 @@
-import { Fragment } from 'react'
+import { techStack, logoUrl } from '../../data/techStack.js'
 
-const stack = ['SpringBoot', 'React', 'Node.js', 'Python', 'Java']
+// Duplicamos a lista pra criar o loop contínuo: quando a primeira metade
+// sai da tela, a segunda (idêntica) já está entrando no mesmo ponto —
+// então o "-50%" no keyframe do marquee fecha o ciclo sem salto visível.
+const track = [...techStack, ...techStack]
 
 export default function TechStack() {
   return (
-    <div className="w-full bg-[#0D0D10]/80 border-b border-white/[0.06] py-5 backdrop-blur-sm">
-      <div className="max-w-4xl mx-auto px-6 flex items-center justify-between text-xs font-mono text-neutral-400">
-        {stack.map((tech, index) => (
-          <Fragment key={tech}>
-            <span className="flex items-center gap-2 text-white font-medium">{tech}</span>
-            {index < stack.length - 1 && <span className="text-neutral-700">✦</span>}
-          </Fragment>
-        ))}
+    <div className="w-full bg-[#0D0D10]/80 border-b border-white/[0.06] py-6 backdrop-blur-sm overflow-hidden">
+      <div className="max-w-4xl mx-auto border-x border-white/10 relative overflow-hidden">
+        <div className="flex w-max animate-marquee hover:[animation-play-state:paused] py-3">
+          {track.map((tech, index) => (
+            <div key={`${tech.slug}-${index}`} className="flex items-center gap-3 px-8 shrink-0">
+              <img src={logoUrl(tech.slug)} alt="" className="tech-icon w-5 h-5" loading="lazy" />
+              <span className="text-sm font-mono text-white font-medium whitespace-nowrap">{tech.name}</span>
+            </div>
+          ))}
+        </div>
+        {/* fade nas bordas pra suavizar a entrada/saída dos ícones */}
+       <div className="pointer-events-none absolute inset-y-0 left-0 w-12 bg-gradient-to-r from-[#09090d] to-transparent"></div>
+        <div className="pointer-events-none absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-[#09090d] to-transparent"></div>
       </div>
     </div>
   )
