@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { tracks } from '../../data/tracks.js'
 import { ROLES, useRole } from '../../context/RoleContext.jsx'
 import { usePlayer } from '../../context/PlayerContext.jsx'
+import { Play, Pause, X } from 'lucide-react'
 
 function EqualizerBars() {
   return (
@@ -154,7 +155,9 @@ export default function Navbar() {
             <div className="flex items-center justify-between border-b border-white/5 pb-2">
               <span className="text-[10px] font-mono text-blue-400 uppercase tracking-wider">Select Soundtrack</span>
               <button type="button" onClick={() => setIsMusicOpen(false)} className="text-neutral-500 hover:text-white text-xs">
-                ✕
+                <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M18 6 6 18M6 6l12 12" />
+                </svg>
               </button>
             </div>
 
@@ -179,7 +182,20 @@ export default function Navbar() {
                       <p className={`truncate ${active ? 'font-semibold text-white' : 'font-medium'}`}>{track.title}</p>
                       <p className={`text-[10px] ${active ? 'text-neutral-400' : 'text-neutral-500'}`}>{track.source}</p>
                     </div>
-                    {active && <span className="text-[9px] font-mono text-blue-400 shrink-0">{isPlaying ? 'pausar' : 'tocar'}</span>}
+                   {active && (
+                      <div className="shrink-0 p-1 text-blue-400">
+                        {isPlaying ? (
+                          <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
+                            <rect x="6" y="4" width="4" height="16" rx="1" />
+                            <rect x="14" y="4" width="4" height="16" rx="1" />
+                          </svg>
+                        ) : (
+                          <svg className="w-3.5 h-3.5 fill-current ml-0.5" viewBox="0 0 24 24">
+                            <polygon points="6 3 20 12 6 21 6 3" />
+                          </svg>
+                        )}
+                      </div>
+                    )}
                   </div>
                 )
               })}
