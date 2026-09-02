@@ -24,7 +24,7 @@ export default function SobreMim() {
       </div>
 
       <div className="space-y-3">
-        <span className="text-[11px] font-mono text-blue-400 uppercase tracking-widest">// Área de atuação</span>
+        <span className="text-[11px] font-mono text-blue-400 uppercase tracking-widest">Principais Tecnologias </span>
         <div className="flex flex-wrap gap-2">
           {profile.areaAtuacao.map((tech) => (
             <span key={tech} className="text-[11px] font-mono px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-neutral-300">
