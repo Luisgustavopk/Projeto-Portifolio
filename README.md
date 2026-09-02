@@ -2,6 +2,10 @@
 
 Website de portfólio profissional desenvolvido para a disciplina de **Laboratório de Desenvolvimento de Software** (PUC Minas — Engenharia de Software, Prof. Glender Brás). O objetivo é apresentar trajetória, habilidades, projetos e formas de contato de maneira moderna e acessível.
 
+> [!TIP]
+> **Acesso rápido:** o site já está publicado, sem necessidade de instalação local.
+> Acesse em: **[https://luis-gustavo-portifolio.vercel.app/](https://luis-gustavo-portifolio.vercel.app/)**
+
 
 ## Sobre o projeto
 
@@ -159,16 +163,17 @@ Detalhes, requisitos e user stories em [`docs/requisitos-niveis-acesso.md`](./do
 
 ## Deploy (Sprint 3)
 
-Ainda não publicado. Passo a passo pra quando for publicar (Vercel é o mais direto pra um projeto Vite):
+Publicado na Vercel: **[luis-gustavo-portifolio.vercel.app](https://luis-gustavo-portifolio.vercel.app/)**
+
+Passo a passo usado pra publicar:
 
 1. Crie uma conta em [vercel.com](https://vercel.com/) (dá pra logar direto com GitHub).
 2. "Add New Project" → importe o repositório `Projeto-Portifolio`.
 3. Em **Root Directory**, aponte para `codigo` (o repositório tem `docs/` na raiz também, então a Vercel precisa saber que a aplicação fica em `codigo/`).
 4. Framework preset: Vite (a Vercel detecta automaticamente). Build command `npm run build`, output `dist` — já vêm certos por padrão.
 5. Deploy. O `vercel.json` já está configurado com o rewrite necessário pra rota `/sobre` não dar 404 ao recarregar a página.
-6. Depois de publicado, atualize o link abaixo e no topo deste README.
 
-Link do site publicado: `_a adicionar_`
+Link do site publicado: **https://luis-gustavo-portifolio.vercel.app/**
 
 ## Roadmap das sprints
 
