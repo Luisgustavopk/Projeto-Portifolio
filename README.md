@@ -157,7 +157,7 @@ Link do protótipo no Figma: `_a adicionar_`
 
 ## Diagrama de casos de uso
 
-![Diagrama de casos de uso — níveis de acesso](./docs/uml/diagrama-casos-de-uso.svg)
+![Diagrama de casos de uso — níveis de acesso](./docs/uml/diagrama-casos-de-uso.pdf)
 
 Detalhes, requisitos e user stories em [`docs/requisitos-niveis-acesso.md`](./docs/requisitos-niveis-acesso.md).
 
