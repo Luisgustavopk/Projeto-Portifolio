@@ -157,7 +157,7 @@ Link do protótipo no Figma: `_a adicionar_`
 
 ## Diagrama de casos de uso
 
-![Diagrama de casos de uso — níveis de acesso](./docs/uml/diagrama-casos-de-uso.pdf)
+[Diagrama de casos de uso — níveis de acesso](./docs/uml/diagrama-casos-de-uso.pdf)
 
 Detalhes, requisitos e user stories em [`docs/requisitos-niveis-acesso.md`](./docs/requisitos-niveis-acesso.md).
 
@@ -179,5 +179,4 @@ Link do site publicado: **https://luis-gustavo-portifolio.vercel.app/**
 
 - [x] **Lab01S01** — Repositório + README inicial, wireframes, protótipo do front-end, navegação e layout principal
 - [x] **Lab01S02** — Layout e estrutura das páginas Sobre Mim (PT/EN), Projetos (timeline), Experiências e Contato (formulário funcional com validação); níveis de acesso modelados e implementados; conteúdo real preenchido
-  - [ ] Imagens/GIFs dos projetos (ver [Conteúdo pendente](#conteúdo-pendente))
-- [ ] **Lab01S03** — Deploy, ajustes finais de UI/UX e imagens/GIFs reais dos projetos
+- [x] **Lab01S03** — Deploy, ajustes finais de UI/UX e imagens/GIFs reais dos projetos
