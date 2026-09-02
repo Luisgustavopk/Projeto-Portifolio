@@ -1,26 +1,11 @@
-// TODO: substituir pelos dados reais do LinkedIn (empresa, cargo, período, descrição).
+
 export const experiences = [
   {
     id: 1,
-    empresa: 'Lorem Ipsum Ltda.',
-    cargo: 'Lorem ipsum dolor',
-    periodo: '2024 — atual',
+    empresa: 'Prodacom Tecnologia',
+    cargo: 'Assistente de T.I. e Inovação (Aprendizagem)',
+    periodo: 'Dez 2025 — Set 2026',
     descricao:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent nec turpis at nunc congue tempor.',
-  },
-  {
-    id: 2,
-    empresa: 'Lorem Ipsum S.A.',
-    cargo: 'Lorem ipsum dolor',
-    periodo: '2023 — 2024',
-    descricao:
-      'Vivamus vitae libero eu justo suscipit lacinia. Nullam bibendum, sem at cursus dapibus, sapien nunc porta ligula.',
-  },
-  {
-    id: 3,
-    empresa: 'Lorem Ipsum Tech',
-    cargo: 'Lorem ipsum dolor',
-    periodo: '2022 — 2023',
-    descricao: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.',
+      'Durante o período de aprendizagem, desenvolvi o site institucional da empresa (prodacom.com.br) e um painel de atendimento com chat em tempo real para comunicação direta com o cliente pelo site, além de automações internas.',
   },
 ]

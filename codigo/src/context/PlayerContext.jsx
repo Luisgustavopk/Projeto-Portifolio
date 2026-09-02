@@ -2,11 +2,6 @@ import { createContext, useCallback, useContext, useEffect, useRef, useState } f
 
 const PlayerContext = createContext(null)
 
-// Player de música do popover do disco de vinil (navbar). Começa sem nada
-// tocando; ao escolher uma faixa, toca baixinho e alimenta "levelRef" com a
-// intensidade do áudio em tempo real (Web Audio API), pra quem quiser reagir
-// visualmente a isso (ver AmbientGlow) sem precisar de um re-render do React
-// a cada frame — é só um número (0..1) atualizado 60x/s numa ref.
 export function PlayerProvider({ children }) {
   const audioRef = useRef(null)
   const audioCtxRef = useRef(null)
@@ -82,7 +77,7 @@ export function PlayerProvider({ children }) {
     }
 
     audio.src = track.src
-    audio.volume = 0.18
+    audio.volume = 0.10 
     setCurrentTrackId(track.id)
 
     try {

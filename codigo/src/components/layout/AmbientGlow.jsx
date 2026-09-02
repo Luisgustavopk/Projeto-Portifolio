@@ -102,7 +102,7 @@ export const AmbientGlow = () => {
       for (let i = 0; i < waveCount; i++) {
         const baseRadius = (85 + i * 50) * scaleFactor
         const waveAmp = ((5 + i * 2) + amp * (12 + i * 6)) * scaleFactor
-        const currentOpacity = Math.max(0, ((0.01 + amp * 0.4) - i * 0.006) * opacityFactor)
+        const currentOpacity = Math.max(0, ((0.01 + amp * 0.45) - i * 0.006) * opacityFactor)
 
         ctx.beginPath()
         

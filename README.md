@@ -2,7 +2,6 @@
 
 Website de portfólio profissional desenvolvido para a disciplina de **Laboratório de Desenvolvimento de Software** (PUC Minas — Engenharia de Software, Prof. Glender Brás). O objetivo é apresentar trajetória, habilidades, projetos e formas de contato de maneira moderna e acessível.
 
-> Status atual: **Sprint 2 (Lab01S02)** — conteúdo das páginas, formulário funcional e níveis de acesso implementados. Conteúdo pessoal ainda está com placeholder (lorem ipsum) — ver seção [Conteúdo pendente](#conteúdo-pendente).
 
 ## Sobre o projeto
 
@@ -10,7 +9,7 @@ O site é dividido em **2 páginas**, cobrindo as 4 seções exigidas pelo labor
 
 | Página | Rota | Seções |
 |---|---|---|
-| Home | `/` | Hero, Stack tecnológica, **Projetos**, **Contato** |
+| Home | `/` | Hero, robô 3D (opcional), Stack tecnológica, **Projetos**, **Contato** |
 | Sobre | `/sobre` | **Sobre Mim** (PT/EN), **Experiências**, Interesses & Objetivos |
 
 ### Níveis de acesso (Sprint 2)
@@ -25,9 +24,11 @@ Documentação completa (requisitos, user stories e diagrama de casos de uso) em
 
 ### Detalhes de identidade visual
 
-- **Stack tecnológica**: faixa em marquee contínuo (loop suave), com os logos de cada tecnologia puxados via hotlink de [logos.lndev.me](https://logos.lndev.me/) e forçados pra monocromático via CSS (`filter: brightness(0) invert(1)` + opacidade reduzida) — assim funciona independente da cor original de cada marca.
-- **Música (popover do disco de vinil)**: agora toca de verdade, baixinho, e a `AmbientGlow` (o brilho azul de fundo) pulsa em sincronia com o áudio via Web Audio API (`AnalyserNode`), de forma suave. **Importante**: as 3 faixas (Baldur's Gate 3, Resident Evil, One Piece) são música comercial licenciada — eu não posso fornecer os arquivos. O player já está funcional, só falta você colocar seus próprios `.mp3` em `codigo/public/audio/` (instruções no README daquela pasta) ou trocar por trilhas royalty-free.
-- **Cards de projeto**: efeito de brilho que segue o cursor ao passar o mouse (inspirado no estilo de componentes do [21st.dev](https://21st.dev/), reimplementado do zero em CSS + React — não foi copiado de lá).
+- **Stack tecnológica**: faixa em marquee contínuo (loop suave), com os logos de cada tecnologia puxados via hotlink de [logos.lndev.me](https://logos.lndev.me/) e forçados pra monocromático via CSS — funciona independente da cor original de cada marca.
+- **Fundo reativo**: `TopoField` (campo topográfico em WebGL) e `AmbientGlow` reagem ao volume da música tocando, via Web Audio API (`AnalyserNode`).
+- **Música (popover do disco de vinil)**: toca de verdade, baixinho. **Importante**: as 3 faixas (Baldur's Gate 3, Resident Evil, One Piece) são música comercial licenciada — os arquivos `.mp3` precisam ser colocados manualmente em `codigo/public/audio/` (não vêm no repositório).
+- **Cards de projeto**: efeito de brilho que segue o cursor ao passar o mouse (`useSpotlight`).
+- **Robô 3D de mesa** (`src/three/`): personagem original em Three.js/React Three Fiber — olhos que seguem o cursor, pisca periodicamente e reage à música (grave/agudo via `PlayerContext`). Aparece só no desktop, através de um botão de toggle no navbar (ativado por padrão desligado). Carregado sob demanda (`React.lazy`) pra não pesar no celular, onde nem chega a ser baixado.
 
 ## Tecnologias utilizadas
 
@@ -36,9 +37,11 @@ Documentação completa (requisitos, user stories e diagrama de casos de uso) em
 - [React Router DOM](https://reactrouter.com/) — navegação entre páginas
 - [Framer Motion](https://www.framer.com/motion/) — transições de página e animações
 - [Tailwind CSS](https://tailwindcss.com/) — estilização utilitária
+- [Three.js](https://threejs.org/) + [React Three Fiber](https://docs.pmnd.rs/react-three-fiber) + [drei](https://github.com/pmndrs/drei) + [postprocessing](https://github.com/pmndrs/react-postprocessing) — robô 3D interativo
+- [lucide-react](https://lucide.dev/) / [react-icons](https://react-icons.github.io/react-icons/) — ícones de interface
 - Fontes: [Inter](https://fonts.google.com/specimen/Inter) (texto) e [JetBrains Mono](https://fonts.google.com/specimen/JetBrains+Mono) (elementos mono/terminal)
 - [Formspree](https://formspree.io/) — envio do formulário de contato sem backend próprio
-- [Web Audio API](https://developer.mozilla.org/pt-BR/docs/Web/API/Web_Audio_API) — análise de frequência do áudio em tempo real (reatividade da `AmbientGlow`)
+- [Web Audio API](https://developer.mozilla.org/pt-BR/docs/Web/API/Web_Audio_API) — análise de frequência do áudio em tempo real (reatividade visual)
 
 ## Estrutura do repositório
 
@@ -49,9 +52,6 @@ Projeto-Portifolio/
 ├── README.md
 ├── docs/
 │   ├── wireframe/                     # prints dos wireframes (Figma, média fidelidade)
-│   │   ├── wireframe_home_page_1.jpg
-│   │   ├── wireframe_home_page_2.jpg
-│   │   └── wireframe_sobre_mim.jpg
 │   ├── uml/
 │   │   └── diagrama-casos-de-uso.svg  # diagrama UML dos níveis de acesso
 │   └── requisitos-niveis-acesso.md    # requisitos + user stories (Sprint 2)
@@ -65,46 +65,51 @@ Projeto-Portifolio/
     ├── public/
     │   └── audio/                       # coloque aqui os .mp3 das faixas (ver README dessa pasta)
     └── src/
-        ├── main.jsx                    # ponto de entrada + BrowserRouter + RoleProvider + PlayerProvider
-        ├── App.jsx                     # rotas (/ e /sobre) + transição de página
-        ├── index.css                   # diretivas Tailwind + estilos globais + .tech-icon (monocromático)
+        ├── main.jsx
+        ├── App.jsx                     # rotas (/ e /sobre) + RobotProvider + transição de página
+        ├── index.css
         ├── context/
-        │   ├── RoleContext.jsx          # estado global do perfil (níveis de acesso)
-        │   └── PlayerContext.jsx        # player de música + análise de frequência (Web Audio API)
+        │   ├── RoleContext.jsx          # perfil selecionado (níveis de acesso)
+        │   ├── PlayerContext.jsx        # player de música + análise de frequência
+        │   └── RobotContext.jsx         # visibilidade do robô 3D (toggle no navbar)
         ├── hooks/
-        │   ├── useHashScroll.js         # scroll suave até âncoras (#projetos, #contato...)
-        │   └── useSpotlight.js          # brilho que segue o cursor nos cards (estilo 21st.dev)
+        │   ├── useHashScroll.js         # scroll suave até âncoras
+        │   ├── useSpotlight.js          # brilho que segue o cursor nos cards
+        │   └── useIsDesktop.js          # detecta desktop (gate do robô 3D)
         ├── pages/
-        │   ├── Home.jsx                 # composição da Home (ordem varia por perfil)
-        │   └── Sobre.jsx                # composição do Sobre (ordem varia por perfil)
+        │   ├── Home.jsx
+        │   └── Sobre.jsx
         ├── components/
         │   ├── layout/
-        │   │   ├── Layout.jsx            # Navbar + AmbientGlow persistentes entre rotas
-        │   │   ├── Navbar.jsx            # navegação + seletor de perfil + popover de música (funcional)
-        │   │   └── AmbientGlow.jsx       # glow de fundo, reage ao volume da música tocando
+        │   │   ├── Layout.jsx
+        │   │   ├── Navbar.jsx            # navegação + seletor de perfil + música + toggle do robô
+        │   │   ├── AmbientGlow.jsx        # reage ao volume da música
+        │   │   └── TopoField.jsx          # campo topográfico WebGL
         │   ├── sections/
         │   │   ├── Hero.jsx
-        │   │   ├── TechStack.jsx         # marquee contínuo com os logos das tecnologias
-        │   │   ├── Projects.jsx          # timeline de projetos (ordenada por ano)
-        │   │   ├── ProjectCard.jsx       # com efeito de spotlight no hover
-        │   │   ├── Contact.jsx           # formulário com validação + envio via fetch
-        │   │   ├── RecruiterHighlight.jsx# banner exclusivo do perfil Recrutador
-        │   │   ├── SobreMim.jsx          # bio PT/EN + área de atuação
-        │   │   ├── Experiencia.jsx       # timeline de experiências
-        │   │   └── Interesses.jsx        # interesses & objetivos
+        │   │   ├── RobotShowcase.jsx      # host do robô 3D (animado, controlado por RobotContext)
+        │   │   ├── TechStack.jsx
+        │   │   ├── Projects.jsx           # carrossel de projetos
+        │   │   ├── ProjectCard.jsx
+        │   │   ├── Contact.jsx
+        │   │   ├── RecruiterHighlight.jsx
+        │   │   ├── SobreMim.jsx
+        │   │   ├── Experiencia.jsx
+        │   │   └── Interesses.jsx
         │   └── ui/
-        │       └── icons.jsx             # ícones SVG usados nas seções
+        │       └── icons.jsx
+        ├── three/
+        │   ├── RobotCanvas.jsx           # <Canvas> do react-three-fiber
+        │   ├── RobotPet.jsx               # geometria, animação e reatividade do robô
+        │   ├── RobotEyes.jsx
+        │   └── AntennaEffects.jsx
         └── data/
-            ├── projects.js               # conteúdo dos cards de projeto (placeholder)
-            ├── experiences.js            # experiências profissionais (placeholder)
-            ├── profile.js                # bio PT/EN, área de atuação, interesses (placeholder)
-            ├── techStack.js              # tecnologias do marquee (slug do logo + nome)
-            └── tracks.js                 # trilhas do popover de música (título, fonte, arquivo de áudio)
+            ├── projects.js                # projetos reais (GitHub)
+            ├── experiences.js             # experiência profissional real
+            ├── profile.js                 # bio PT/EN, área de atuação, interesses reais
+            ├── techStack.js               # tecnologias do marquee
+            └── tracks.js                  # trilhas do popover de música
 ```
-
-`docs/` é o nome padrão usado pelo próprio GitHub para pastas de documentação (inclusive para publicar GitHub Pages a partir dela). Já `codigo/` é uma escolha livre — funciona bem e já está descritivo, mas se preferir seguir a convenção mais comum em projetos front-end em inglês (`app/`, `web/` ou `frontend/`), é só avisar que eu ajusto os imports e a estrutura.
-
-A separação interna dentro de `codigo/src/` segue o padrão comum em projetos React/Vite: **pages** compõem as rotas a partir de **components**, divididos entre `layout` (elementos fixos em toda página), `sections` (blocos de conteúdo) e `ui` (peças pequenas reutilizáveis). `context/` guarda estado compartilhado entre páginas (o perfil selecionado). Conteúdo que muda com frequência fica isolado em `data/`, facilitando atualizar informações sem mexer em componentes.
 
 ## Como rodar localmente
 
@@ -126,21 +131,13 @@ npm run preview
 
 ### Configurando o envio do formulário de contato
 
-O formulário usa o [Formspree](https://formspree.io/) (envio de e-mail sem precisar de backend próprio — indicado pelo próprio guia do laboratório como abordagem de hospedagem 100% gratuita):
+O formulário usa o [Formspree](https://formspree.io/):
 
 1. Crie uma conta gratuita em [formspree.io](https://formspree.io/) e crie um formulário novo.
 2. Copie o ID gerado (algo como `xy_zabc123`).
 3. Cole em `codigo/src/components/sections/Contact.jsx`, na constante `FORM_ENDPOINT`, no lugar de `seu-id-aqui`.
 
-## Conteúdo pendente
 
-O conteúdo pessoal (bio, formação, experiências, projetos, links de redes sociais) está com **lorem ipsum** nos seguintes arquivos, prontos pra receber as informações reais:
-
-- `codigo/src/data/profile.js` — bio (PT/EN), área de atuação, interesses/objetivos, formação
-- `codigo/src/data/experiences.js` — experiências profissionais
-- `codigo/src/data/projects.js` — projetos (nome, descrição, tecnologias, link do GitHub)
-- `codigo/src/components/sections/Contact.jsx` — links de WhatsApp, LinkedIn, GitHub e e-mail (constante `quickLinks`)
-- `codigo/public/audio/` — arquivos `.mp3` das 3 faixas do player (ver aviso de direitos autorais no README dessa pasta)
 
 ## Protótipos (Figma)
 
@@ -176,6 +173,6 @@ Link do site publicado: `_a adicionar_`
 ## Roadmap das sprints
 
 - [x] **Lab01S01** — Repositório + README inicial, wireframes, protótipo do front-end, navegação e layout principal
-- [x] **Lab01S02** — Layout e estrutura das páginas Sobre Mim (PT/EN), Projetos (timeline), Experiências e Contato (formulário funcional com validação); níveis de acesso modelados e implementados
-  - [ ] Substituir conteúdo placeholder pelas informações reais (ver [Conteúdo pendente](#conteúdo-pendente))
+- [x] **Lab01S02** — Layout e estrutura das páginas Sobre Mim (PT/EN), Projetos (timeline), Experiências e Contato (formulário funcional com validação); níveis de acesso modelados e implementados; conteúdo real preenchido
+  - [ ] Imagens/GIFs dos projetos (ver [Conteúdo pendente](#conteúdo-pendente))
 - [ ] **Lab01S03** — Deploy, ajustes finais de UI/UX e imagens/GIFs reais dos projetos

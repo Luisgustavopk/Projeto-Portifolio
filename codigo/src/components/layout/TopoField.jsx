@@ -151,8 +151,8 @@ function clamp(value, minimum, maximum) {
 }
 
 export default function TopoField({
-  isPlaying = false,  // Se a música está tocando
-  audioLevel,        // (Opcional) Nível real do áudio de 0.0 a 1.0 do Web Audio API
+  isPlaying = false,  
+  audioLevel,        
   speed = 1,
   density = 1,
   length = 1,
@@ -161,18 +161,18 @@ export default function TopoField({
 }) {
   const iframeRef = useRef(null);
 
-  // Envia a batida/nível de áudio para dentro do Iframe WebGL
+ 
   useEffect(() => {
     let animId;
 
     const updateAudioFrame = () => {
       let level = audioLevel;
 
-      // Se não houver analisador de áudio explícito, gera um pulso ritmado de batida (~120 BPM)
+      
       if (level === undefined || level === null) {
         if (isPlaying) {
           const t = Date.now() / 1000;
-          // Pulso de batida de música (Kick / Sub-bass)
+          
           const beat = Math.pow(Math.max(0, Math.sin(t * Math.PI * 2.2)), 4);
           const subBeat = Math.pow(Math.max(0, Math.sin(t * Math.PI * 4.4 + 0.5)), 6) * 0.4;
           level = Math.min(1.0, beat + subBeat);

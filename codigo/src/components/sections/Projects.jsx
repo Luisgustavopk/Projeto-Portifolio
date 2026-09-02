@@ -29,7 +29,7 @@ export default function Projects() {
         {/* Seta Esquerda */}
         <button
           onClick={() => scroll('left')}
-          className="hidden md:flex absolute -left-12 lg:-left-14 top-1/2 -translate-y-1/2 z-10 p-2.5 rounded-full border border-white/10 bg-slate-950/80 backdrop-blur-md text-white/70 hover:text-white hover:bg-slate-900 hover:border-white/25 hover:scale-110 opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-2xl cursor-pointer"
+          className="hidden md:flex absolute -left-12 lg:-left-14 top-1/2 -translate-y-1/2 z-10 p-2.5 rounded-full border border-white/10 bg-slate-950/80 backdrop-blur-md text-white/70 hover:text-white hover:bg-slate-900 hover:border-white/25 hover:scale-110 opacity-60 group-hover:opacity-100 transition-all duration-300 shadow-2xl cursor-pointer"
           aria-label="Projeto anterior"
         >
           <ChevronLeft className="w-5 h-5" />
@@ -38,7 +38,7 @@ export default function Projects() {
         {/* Seta Direita */}
         <button
           onClick={() => scroll('right')}
-          className="hidden md:flex absolute -right-12 lg:-right-14 top-1/2 -translate-y-1/2 z-10 p-2.5 rounded-full border border-white/10 bg-slate-950/80 backdrop-blur-md text-white/70 hover:text-white hover:bg-slate-900 hover:border-white/25 hover:scale-110 opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-2xl cursor-pointer"
+          className="hidden md:flex absolute -right-12 lg:-right-14 top-1/2 -translate-y-1/2 z-10 p-2.5 rounded-full border border-white/10 bg-slate-950/80 backdrop-blur-md text-white/70 hover:text-white hover:bg-slate-900 hover:border-white/25 hover:scale-110 opacity-60 group-hover:opacity-100 transition-all duration-300 shadow-2xl cursor-pointer"
           aria-label="Próximo projeto"
         >
           <ChevronRight className="w-5 h-5" />

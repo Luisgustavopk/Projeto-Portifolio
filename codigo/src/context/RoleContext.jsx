@@ -1,7 +1,5 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 
-// Níveis de acesso (Sprint 2): a pessoa escolhe quem ela é e o site
-// reprioriza o conteúdo pra o que mais importa pra aquele perfil.
 export const ROLES = {
   visitante: {
     id: 'visitante',

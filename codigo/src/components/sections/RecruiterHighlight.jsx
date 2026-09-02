@@ -13,7 +13,7 @@ export default function RecruiterHighlight() {
         className="flex items-center justify-between gap-4 bg-darkCard border border-blue-500/20 hover:border-blue-500/40 rounded-xl p-5 transition-all group"
       >
         <div>
-          <span className="text-[11px] font-mono text-blue-400 uppercase tracking-widest">// Experiência mais recente</span>
+          <span className="text-[11px] font-mono text-blue-400 uppercase tracking-widest">Experiência mais recente</span>
           <p className="text-sm font-bold text-white mt-1">
             {latest.cargo} <span className="text-neutral-500 font-normal">— {latest.empresa}</span>
           </p>
